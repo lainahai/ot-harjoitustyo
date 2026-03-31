@@ -1,10 +1,37 @@
-# Ohjelmistotekniikka, harjoitustyö
+# Dynamo-Relion metadatakonvertteri
 
-Tästä askarrellaan nerokas harkkatyö, joka tekee jotain. Ehkä. Toivottavasti.
-Sisältää ainakin **lihavoituja** ja _kursivoituja_ osia.
+Sovellus muuntaa Dynamon käyttämän partikkelien metadatan Relionin vaatimaan muotoon.
 
-[Laskarit](laskarit/)
+## Dokumentaatio
+- [Vaatimusmäärittely](dokumentaatio/vaatimusmaarittely.md)
+- [Changelog](dokumentaatio/changelog.md)
+- [Työaikakirjanpito](dokumentaatio/tuntikirjanpito.md)
 
-[Vaatimusmäärittely](dokumentaatio/vaatimusmaarittely.md)
+## Asennus
+1. Asenna riippuvuudet komennolla
 
-[Työaikakirjanpito](dokumentaatio/tuntikirjanpito.md)
+```poetry install```
+
+2. Käynnistä sovellus komennolla
+
+```poetry run invoke start```
+
+## Komentorivitoiminnot
+
+### Ohjelman suorittaminen
+Suorita ohjelma komennolla
+
+```poetry run invoke start```
+
+### Testit
+Suorita testit komennolla
+
+```poetry run invoke test```
+
+
+### Testikattavuus
+Luo testauskattavuusraportti komennolla
+
+```poetry run invoke coverage-report```
+
+Raportti generoidaan htmlcov-hakemistoon
