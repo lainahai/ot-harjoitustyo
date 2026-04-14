@@ -19,9 +19,10 @@ Sovellus muuntaa Dynamon käyttämän partikkelien metadatan Relionin vaatimaan 
 ## Komentorivitoiminnot
 
 ### Ohjelman suorittaminen
-Suorita ohjelma komennolla
+Ohjelman suoritus
 
-```poetry run invoke start```
+- ```poetry run invoke start``` tulostaa muunnetun datan
+- ```poetry run invoke write-starfile``` tallentaa datan ```converted_particles.star``` -tiedostoon
 
 ### Testit
 Suorita testit komennolla

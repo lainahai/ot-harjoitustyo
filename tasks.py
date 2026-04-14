@@ -12,6 +12,19 @@ def start(
 
 
 @task
+def write_starfile(
+    ctx,
+    tablefile="test_data/test_table.tbl",
+    vllfile="test_data/test_vll.vll",
+    tomogramfile="test_data/test_tomograms.star",
+):
+    ctx.run(
+        f"python3 src/main.py {tablefile} {vllfile} {tomogramfile} converted_particles.star",
+        pty=True,
+    )
+
+
+@task
 def test(ctx):
     ctx.run("pytest src", pty=True)
 
