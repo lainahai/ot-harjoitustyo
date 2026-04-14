@@ -32,7 +32,7 @@ class FileRepository:
             print(starfile.to_string(data_dict))
         except BrokenPipeError:
             # Catch broken pipe error if piping to head or something similar
-            # that stops early.
+            # that stops reading early.
             return
 
 

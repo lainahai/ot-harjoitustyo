@@ -6,6 +6,7 @@ Sovellus muuntaa Dynamon käyttämän partikkelien metadatan Relionin vaatimaan 
 - [Vaatimusmäärittely](dokumentaatio/vaatimusmaarittely.md)
 - [Changelog](dokumentaatio/changelog.md)
 - [Työaikakirjanpito](dokumentaatio/tuntikirjanpito.md)
+- [Arkkitehtuuri](dokumentaatio/arkkitehtuuri.md)
 
 ## Asennus
 1. Asenna riippuvuudet komennolla
@@ -36,3 +37,8 @@ Luo testauskattavuusraportti komennolla
 ```poetry run invoke coverage-report```
 
 Raportti generoidaan htmlcov-hakemistoon
+
+### Pylint
+Aja laaturaportti komennolla
+
+```poetry run invoke lint```

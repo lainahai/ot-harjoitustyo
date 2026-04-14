@@ -13,3 +13,5 @@
 | 10.4.2026 |  2     | "Asiakaspalaveri", kysymyksiä metadatasta. |
 | 11.4.2026 |  3     | Konversion alustava toteutus ja tallennus tiedostoon |
 | 12.4.2026 |  2     | Uusia kysymyksiä, binning mukaan laskentaan |
+| 14.4.2026 |  7     | Komentoriville tulostus esim. putkitusta varten. Luokkajako uusiksi, muutama uusi testi, uudet invoke-taskit, dokumentaatio |
+|           | __34__ |              |
