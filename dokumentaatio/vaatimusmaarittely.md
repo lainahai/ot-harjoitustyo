@@ -12,22 +12,31 @@ Dynamossa sijainnit on ilmoitettu pikseleinä, Relionissa ångströmeinä. Myös
 
 ## Alustava toiminnallisuus
 
-* Käyttäjä voi valita luettavan star-tiedoston
+* [ ] Käyttäjä voi valita luettavan star-tiedoston
   * sisältää tomogrammien ja mikroskoopin metatiedot, joita tarvitaan konversiossa
-* Käyttäjä voi valita luettavan dynamo-taulukon
+* [ ] Käyttäjä voi valita luettavan dynamo-taulukon
   * Dynamo-taulukko sisältää tiedot tomogrammeista valituista partikkeleista, joista tehdään analyysi
-* Käyttäjä voi valita luettavan vll-tiedoston
+* [ ] Käyttäjä voi valita luettavan vll-tiedoston
   * Tiedosto sisältää absoluuttiset polut tomogrammidataa sisältäviin tiedostoihin
-* Käyttäjä voi antaa nimen luotavalle star-tiedostolle
-* Käyttäjä voi antaa tiedostonimet suoraan parametreina
+* [x] Käyttäjä voi antaa nimen luotavalle star-tiedostolle - tehty
+* [x] Käyttäjä voi antaa tiedostonimet suoraan parametreina - tehty
   * Tällöin käyttöliittymää ei käynnistetä vaan konversio tehdään suoraan annetuilla tiedostoilla.
-* Käyttäjä voi luoda dynamon taulukosta star-tiedoston, joka sisältää
+* [x] Käyttäjä voi luoda dynamon taulukosta star-tiedoston, joka sisältää  - tehty
   * koordinaatit
   * euler-kulmat
   * tomogrammin tunnistetiedot
   * jännitteen
+* [x] Tiedostoon tallentamisen sijaan star-tiedoston sisältö voidaan tulostaa esimerkiksi putkittamista varten  - tehty
+* [ ] Käyttäjä voi valita haluaako muuntaa vain keskiarvoistettujen partikkelien tiedot, vai kaikki partikkelit 
 
 ## Laajennusmahdollisuuksia
+* Luettavien tiedostojen validointi, esim:
+    * Dynamon table-tiedostossa on kaikki kentät
+    * Tomogrammien star-tiedostossa on jännite, kuvien koot ja muut tarpeelliset tiedot
+* Muunnettujen tietojen validointi, esim:
+    * Koordinaatit ovat tomogrammien sisällä
+    * Euler-kulmat ovat järkevissä rajoissa
 * VLL-tiedoston luonti
   * Käyttäjä voisi valita projektikansiosta analysoitavaksi otettavat tomogrammit
+  * Tämän voi ehkä luoda suoraan tomogrammien star-tiedoston pohjalta
 * Konversio myös toiseen suuntaan, Relionista Dynamoon

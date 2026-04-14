@@ -9,3 +9,7 @@
 | 25.3.2026 |  1     | tiedostojen lukemisen testaamista |
 | 30.3.2026 |  1     | Poetry-projektin alustus, toteutuksen aloitus |
 | 31.3.2026 |  5     | Tiedostojen luku, tietojen yhdistäminen, testit, dokumentaatio. Coveragen kanssa painimista (yritti lisätä viikon 2 laskarien testit mukaan) |
+| 9.4.2026  |  4     | Paja, relionin metadatakenttien dokumentaatioon tutustuminen, euler-kulmien konversion testaus eri kirjastoilla. |
+| 10.4.2026 |  2     | "Asiakaspalaveri", kysymyksiä metadatasta. |
+| 11.4.2026 |  3     | Konversion alustava toteutus ja tallennus tiedostoon |
+| 12.4.2026 |  2     | Uusia kysymyksiä, binning mukaan laskentaan |
