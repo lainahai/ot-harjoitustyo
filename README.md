@@ -9,6 +9,7 @@ Sovellus muuntaa Dynamon käyttämän partikkelien metadatan Relionin vaatimaan 
 - [Arkkitehtuuri](dokumentaatio/arkkitehtuuri.md)
 
 ## Asennus
+
 1. Asenna riippuvuudet komennolla
 
 ```poetry install```
@@ -24,8 +25,8 @@ Ohjelman suoritus
 
 - ```poetry run invoke start``` käynnistää ohjelman käyttöliittymän. 
     - HUOM: invoken avulla suoritettaessa näppäimistökomennot eivät jostain syystä toimi. Käytä siis hiirtä.
-- ```poetry run invoke print-starfile``` tulostaa testidatan konversion ilman käyttöliittymää 
-- ```poetry run invoke write-starfile``` tallentaa testidatan konversion ```particles.star``` -tiedostoon
+- ```poetry run invoke print-starfile``` tulostaa konversion ilman käyttöliittymää 
+- ```poetry run invoke write-starfile``` tallentaa konversion ```particles.star``` -tiedostoon
 
 ### Testit
 Suorita testit komennolla
@@ -44,3 +45,10 @@ Raportti generoidaan htmlcov-hakemistoon
 Aja laaturaportti komennolla
 
 ```poetry run invoke lint```
+
+## Esimerkkidata
+
+```test_data```-kansiossa on esimerkkidataa:
+- ```test_table.tbl```: Dynamon tuottamaa parikkelidataa. [Linkki kenttien selitteeseen](https://www.dynamo-em.org/w/index.php?title=Table_convention)
+- ```test_vll.vll```: Dynamon käyttämä lista tomogrammeista, joista partikkelit on poimittu
+- ```test_tomograms.star```: Relionin tuottama tomogrammien metadatatiedosto
