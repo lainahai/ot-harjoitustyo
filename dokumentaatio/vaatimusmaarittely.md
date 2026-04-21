@@ -12,22 +12,25 @@ Dynamossa sijainnit on ilmoitettu pikseleinä, Relionissa ångströmeinä. Myös
 
 ## Alustava toiminnallisuus
 
-* [ ] Käyttäjä voi valita luettavan star-tiedoston
-  * sisältää tomogrammien ja mikroskoopin metatiedot, joita tarvitaan konversiossa
-* [ ] Käyttäjä voi valita luettavan dynamo-taulukon
-  * Dynamo-taulukko sisältää tiedot tomogrammeista valituista partikkeleista, joista tehdään analyysi
-* [ ] Käyttäjä voi valita luettavan vll-tiedoston
-  * Tiedosto sisältää absoluuttiset polut tomogrammidataa sisältäviin tiedostoihin
+* [x] Käyttäjä voi valita luettavan star-tiedoston - tehty
+    * sisältää tomogrammien ja mikroskoopin metatiedot, joita tarvitaan konversiossa
+* [x] Käyttäjä voi valita luettavan dynamo-taulukon -tehty
+    * Dynamo-taulukko sisältää tiedot tomogrammeista valituista partikkeleista, joista tehdään analyysi
+* [x] Käyttäjä voi valita luettavan vll-tiedoston -tehty
+    * Tiedosto sisältää absoluuttiset polut tomogrammidataa sisältäviin tiedostoihin
 * [x] Käyttäjä voi antaa nimen luotavalle star-tiedostolle - tehty
+    * [x] Parametrina - tehty
+    * [x] Käyttöliittymässä - tehty
 * [x] Käyttäjä voi antaa tiedostonimet suoraan parametreina - tehty
-  * Tällöin käyttöliittymää ei käynnistetä vaan konversio tehdään suoraan annetuilla tiedostoilla.
+    * Tällöin käyttöliittymää ei käynnistetä vaan konversio tehdään suoraan annetuilla tiedostoilla.
 * [x] Käyttäjä voi luoda dynamon taulukosta star-tiedoston, joka sisältää  - tehty
-  * koordinaatit
-  * euler-kulmat
-  * tomogrammin tunnistetiedot
-  * jännitteen
+    * koordinaatit
+    * euler-kulmat
+    * tomogrammin tunnistetiedot
+    * jännitteen
 * [x] Tiedostoon tallentamisen sijaan star-tiedoston sisältö voidaan tulostaa esimerkiksi putkittamista varten  - tehty
 * [ ] Käyttäjä voi valita haluaako muuntaa vain keskiarvoistettujen partikkelien tiedot, vai kaikki partikkelit 
+* [ ] Virheilmoitukset ja ilmoitus onnistuneesta konversiosta käyttöliittymässä
 
 ## Laajennusmahdollisuuksia
 * Luettavien tiedostojen validointi, esim:

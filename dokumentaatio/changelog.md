@@ -14,3 +14,10 @@
 - Jännite ja binning-parametri luetaan tomogrammien star-tiedostosta
 - Käyttäjä voi antaa luettavat tiedostot ja tallennettavan tiedoston nimen parametreina.
 - Käyttäjä voi myös tulostaa tiedoston sisällön tiedostoon kirjoittamisen sijaan.
+
+## Viikko 5
+
+- Käyttöliittymän kehitys Textual-kirjastolla aloitettu 
+- Käyttäjä voi valita tiedostot käyttöliittymästä
+- Käyttäjä voi nimetä tallennettavan tiedoston käyttöliittymässä
+- Jos käyttäjä antaa kaikki tiedostot parametreina, käyttöliittymä ei käynnisty

@@ -1,6 +1,7 @@
 import argparse
 
 from services.particle_service import ParticleService
+from ui.converter_app import ConverterApp
 
 
 def main(args):
@@ -11,15 +12,38 @@ def main(args):
     tomogram_star_file_name = args.tomogramfile
     output_file_name = args.outputfile
 
-    pservice.convert_dynamo_star(
-        table_file_name, tomogram_star_file_name, vll_file_name, output_file_name
-    )
+    if (
+        table_file_name
+        and vll_file_name
+        and tomogram_star_file_name
+        and output_file_name
+    ):
+        pservice.convert_dynamo_star(
+            table_file_name, tomogram_star_file_name, vll_file_name, output_file_name
+        )
+    else:
+        app = ConverterApp(pservice)
+        app.run()
 
 
-parser = argparse.ArgumentParser(description="Convert metadata from Dynamo to Relion")
-parser.add_argument("tablefile", help="Path to dynamo table file")
-parser.add_argument("vllfile", help="Path to VLL file")
-parser.add_argument("tomogramfile", help="Path to tomogram metadata starfile")
+parser = argparse.ArgumentParser(
+    description="Convert particle metadata from Dynamo to Relion"
+)
+parser.add_argument(
+    "tablefile",
+    help="Path to dynamo table file",
+    nargs="?",
+    default=None,
+)
+parser.add_argument(
+    "vllfile",
+    help="Path to VLL file",
+    nargs="?",
+    default=None,
+)
+parser.add_argument(
+    "tomogramfile", help="Path to tomogram metadata starfile", nargs="?", default=None
+)
 parser.add_argument(
     "outputfile",
     help="Output star file name. Print to stdout if omitted.",

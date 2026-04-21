@@ -14,4 +14,5 @@
 | 11.4.2026 |  3     | Konversion alustava toteutus ja tallennus tiedostoon |
 | 12.4.2026 |  2     | Uusia kysymyksiä, binning mukaan laskentaan |
 | 14.4.2026 |  7     | Komentoriville tulostus esim. putkitusta varten. Luokkajako uusiksi, muutama uusi testi, uudet invoke-taskit, dokumentaatio |
-|           | __34__ |              |
+| 20.4.2026 |  7     | Textual-käyttöliittymä aloitettu. Tiedostojen valinta, tallennettavan tiedoston nimeäminen ja konversio mahdollista tehdä käyttöliittymästä  |
+|           | __41__ |              |
