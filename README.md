@@ -8,6 +8,10 @@ Sovellus muuntaa Dynamon käyttämän partikkelien metadatan Relionin vaatimaan 
 - [Työaikakirjanpito](dokumentaatio/tuntikirjanpito.md)
 - [Arkkitehtuuri](dokumentaatio/arkkitehtuuri.md)
 
+## Release
+
+[Viikko 5 Release](releases/tag/viikko5)
+
 ## Asennus
 
 1. Asenna riippuvuudet komennolla
