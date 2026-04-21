@@ -10,7 +10,7 @@ Sovellus muuntaa Dynamon käyttämän partikkelien metadatan Relionin vaatimaan 
 
 ## Release
 
-[Viikko 5 Release](releases/tag/viikko5)
+[Viikko 5 Release](https://github.com/lainahai/ot-harjoitustyo/releases/tag/viikko5)
 
 ## Asennus
 
