@@ -2,12 +2,14 @@ import re
 
 import eulerangles
 import pandas as pd
+import starfile
 
 from repositories.file_repository import file_repository
 
 
 class ParticleService:
-    def __init__(self, repository=file_repository):
+    def __init__(self, log_service, repository=file_repository):
+        self._log_service = log_service
         self._repository = repository
 
     def convert_dynamo_star(
@@ -56,9 +58,9 @@ class ParticleService:
 
         if output_filename:
             self._repository.write_starfile(converted_particles_dict, output_filename)
+            self._log_service.log(f"Wrote {output_filename}", ui_only=True)
             return
-
-        self._repository.print_starfile(converted_particles_dict)
+        self._log_service.log(starfile.to_string(converted_particles_dict))
 
     def _read_dynamo_particles(self, table_filename, vll_filename):
         particles_df = self._repository.read_dynamotable(table_filename)

@@ -29,8 +29,11 @@ Dynamossa sijainnit on ilmoitettu pikseleinä, Relionissa ångströmeinä. Myös
     * tomogrammin tunnistetiedot
     * jännitteen
 * [x] Tiedostoon tallentamisen sijaan star-tiedoston sisältö voidaan tulostaa esimerkiksi putkittamista varten  - tehty
+    * Vain kun ohjelma suoritetaan ilman käyttöliittymää
+* [x] Käyttäjä voi tulostaa konversion käyttöliittymän näkymään tiedostoon tallentamisen sijaan
 * [ ] Käyttäjä voi valita haluaako muuntaa vain keskiarvoistettujen partikkelien tiedot, vai kaikki partikkelit 
-* [ ] Virheilmoitukset ja ilmoitus onnistuneesta konversiosta käyttöliittymässä
+* [x] Ilmoitus onnistuneesta konversiosta käyttöliittymässä - tehty
+* [ ] Virheilmoitukset näkyviin käyttöliittymään
 
 ## Laajennusmahdollisuuksia
 * Luettavien tiedostojen validointi, esim:

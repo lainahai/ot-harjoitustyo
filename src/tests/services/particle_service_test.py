@@ -7,10 +7,19 @@ from repositories.file_repository import FileRepository
 from services.particle_service import ParticleService
 
 
+class MockLogService:
+    def __init__(self):
+        self.logged_srings_ui_only = []
+        self.logged_strings = []
+
+    def log(self, log_str, ui_only=False):
+        self.logged_strings.append(log_str)
+        self.logged_srings_ui_only.append(ui_only)
+
+
 class MockRepository(FileRepository):
     def __init__(self):
         self.write_star_called = False
-        self.print_star_called = False
         self.write_star_filename = None
         self.converted_dict = None
 
@@ -60,14 +69,12 @@ class MockRepository(FileRepository):
         self.write_star_called = True
         self.write_star_filename = filename
 
-    def print_starfile(self, data_dict):
-        self.converted_dict = data_dict
-        self.print_star_called = True
-
 
 class TestParticleService(unittest.TestCase):
     def setUp(self):
-        self.particle_service = ParticleService()
+        self.repository = MockRepository()
+        self.log_service = MockLogService()
+        self.particle_service = ParticleService(self.log_service, self.repository)
 
     def test_find_tomo_names_finds_correct_names_from_vll_string(self):
         test_string = "/mnt/data/project/Tomograms/job006/tomograms/rec_Position_10_2.mrc\n/mnt/data/project/Tomograms/job006/tomograms/rec_Position_10_3.mrc"
@@ -110,14 +117,27 @@ class TestParticleService(unittest.TestCase):
         # check_dtype=False to ignore integer and float type mistmatch.
         pd.testing.assert_frame_equal(converted_df, correct_df, check_dtype=False)
 
-    def test_convert_prints_if_output_file_is_not_given(self):
+    def test_convert_outputs_to_log_if_output_file_is_not_given(self):
         tablefile = "../../test_data/test_table.tbl"
         vllfile = "../../test_data/test_vll.vll"
         tomogramfile = "../../test_data/test_tomograms.star"
 
-        test_repository = MockRepository()
-        pservice = ParticleService(test_repository)
-        pservice.convert_dynamo_star(tablefile, vllfile, tomogramfile)
+        self.particle_service.convert_dynamo_star(tablefile, vllfile, tomogramfile)
 
-        self.assertTrue(test_repository.print_star_called)
-        self.assertFalse(test_repository.write_star_called)
+        self.assertTrue(len(self.log_service.logged_strings) > 0)
+        self.assertFalse(self.log_service.logged_srings_ui_only[0])
+        self.assertFalse(self.repository.write_star_called)
+
+    def test_convert_writes_file_when_output_file_is_given(self):
+        tablefile = "../../test_data/test_table.tbl"
+        vllfile = "../../test_data/test_vll.vll"
+        tomogramfile = "../../test_data/test_tomograms.star"
+        outputfile = "test_output.star"
+
+        self.particle_service.convert_dynamo_star(
+            tablefile, vllfile, tomogramfile, outputfile
+        )
+
+        self.assertTrue(self.log_service.logged_strings[0] == f"Wrote {outputfile}")
+        self.assertTrue(self.log_service.logged_srings_ui_only[0])
+        self.assertTrue(self.repository.write_star_called)

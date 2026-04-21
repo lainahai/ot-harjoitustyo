@@ -21,3 +21,5 @@
 - Käyttäjä voi valita tiedostot käyttöliittymästä
 - Käyttäjä voi nimetä tallennettavan tiedoston käyttöliittymässä
 - Jos käyttäjä antaa kaikki tiedostot parametreina, käyttöliittymä ei käynnisty
+- Siirretty tulostusten ohjaus LogServiceen
+- Konversion tuloksen voi tulostaa käyttöliittymään

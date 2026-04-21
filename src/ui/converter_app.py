@@ -1,6 +1,6 @@
 from textual import on
 from textual.app import App, ComposeResult
-from textual.containers import Container, Horizontal, HorizontalGroup
+from textual.containers import Container, Horizontal
 from textual.widget import Widget
 from textual.widgets import (
     Button,
@@ -71,11 +71,15 @@ class ConverterApp(App):
             Rule(),
             Static(self.get_selection_string(), id="selections"),
             CompactHorizontal(
-                Button("Convert and save", id="convert"),
+                Button("Convert and save", id="convert-save"),
+                Button("Convert and show", id="convert-print"),
                 Button("Quit", id="quit"),
             ),
-            Log(max_lines=10),
+            Log(max_lines=None, id="log"),
         )
+
+    def print_log(self, log_str):
+        self.query_one("#log").write_lines(log_str.splitlines())
 
     @on(DirectoryTree.FileSelected, "#dynamotable DirectoryTree")
     def handle_dynamo_path(self, message):
@@ -92,16 +96,20 @@ class ConverterApp(App):
         self.tomograms_path = message.path
         self.update_selections()
 
-    @on(Button.Pressed, "#convert")
-    def convert_button_pressed(self):
+    @on(Button.Pressed, "#convert-save")
+    def convert_save_button_pressed(self):
+        output_filename = self.query_one("#output_filename").value
+        self.action_start_conversion(output_filename)
+
+    @on(Button.Pressed, "#convert-print")
+    def convert_print_button_pressed(self):
         self.action_start_conversion()
 
     @on(Button.Pressed, "#quit")
     def quit_button_pressed(self):
         self.exit()
 
-    def action_start_conversion(self):
-        output_filename = self.query_one("#output_filename").value
+    def action_start_conversion(self, output_filename=None):
         self.particle_service.convert_dynamo_star(
             self.dynamotable_path,
             self.tomograms_path,

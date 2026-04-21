@@ -1,28 +1,26 @@
 import argparse
 
+from services.log_service import LogService
 from services.particle_service import ParticleService
 from ui.converter_app import ConverterApp
 
 
 def main(args):
-    pservice = ParticleService()
+    log_service = LogService()
+    pservice = ParticleService(log_service)
 
     table_file_name = args.tablefile
     vll_file_name = args.vllfile
     tomogram_star_file_name = args.tomogramfile
     output_file_name = args.outputfile
 
-    if (
-        table_file_name
-        and vll_file_name
-        and tomogram_star_file_name
-        and output_file_name
-    ):
+    if table_file_name and vll_file_name and tomogram_star_file_name:
         pservice.convert_dynamo_star(
             table_file_name, tomogram_star_file_name, vll_file_name, output_file_name
         )
     else:
         app = ConverterApp(pservice)
+        log_service.ui = app
         app.run()
 
 

@@ -27,13 +27,5 @@ class FileRepository:
     def write_starfile(self, data_dict, filename):
         starfile.write(data_dict, filename)
 
-    def print_starfile(self, data_dict):
-        try:
-            print(starfile.to_string(data_dict))
-        except BrokenPipeError:
-            # Catch broken pipe error if piping to head or something similar
-            # that stops reading early.
-            return
-
 
 file_repository = FileRepository()
