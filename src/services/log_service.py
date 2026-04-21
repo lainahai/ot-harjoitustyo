@@ -1,6 +1,6 @@
 class LogService:
     def __init__(self, ui=None):
-        self.ui = None
+        self.ui = ui
 
     def log(self, log_str, ui_only=False):
         if self.ui:
@@ -9,5 +9,6 @@ class LogService:
             try:
                 print(log_str)
             except BrokenPipeError:
-                # Avoid unnecessary error if piping output to head or something else that stops reading early.
+                # Avoid unnecessary error if piping output to head or
+                # something else that stops reading early.
                 return

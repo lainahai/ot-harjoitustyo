@@ -1,3 +1,4 @@
+## Luokkakaavio
 ```mermaid
  classDiagram
     ParticleService --> "1" FileRepository
@@ -20,4 +21,28 @@
         run()
         print_log()
     }
+```
+
+## Konversion sekvenssikaavio
+
+Kun käyttöliittymässä on valittu käsiteltävät tiedostot tai ne on annettu parametreina, suoritus etenee seuraavasti:
+
+```mermaid
+sequenceDiagram
+
+sequenceDiagram
+    participant UI
+    participant ParticleService
+    participant FileRepository
+    participant LogService
+    UI -->>+ParticleService: convert_dynamo_star(tbl, vll, tomo, of)
+    ParticleService-->>+FileRepository: read_dynamotable(tbl)
+    FileRepository-->>-ParticleService: particles_df
+    ParticleService-->>+FileRepository: read_vll(vll)
+    FileRepository-->>-ParticleService: vll_contents
+    ParticleService -->>+FileRepository: read_starfile(tomo)
+    FileRepository -->>-ParticleService: tomograms_star_df
+    ParticleService -->>FileRepository: write_starfile(converted_particles_dict)
+    ParticleService -->>LogService: log(f"Wrote {of}", ui_only=True)
+      
 ```

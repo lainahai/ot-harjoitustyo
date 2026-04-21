@@ -2,7 +2,12 @@ from invoke import task
 
 
 @task
-def start(
+def start(ctx):
+    ctx.run("python3 src/main.py", pty=True)
+
+
+@task
+def print_starfile(
     ctx,
     tablefile="test_data/test_table.tbl",
     vllfile="test_data/test_vll.vll",
@@ -19,7 +24,7 @@ def write_starfile(
     tomogramfile="test_data/test_tomograms.star",
 ):
     ctx.run(
-        f"python3 src/main.py {tablefile} {vllfile} {tomogramfile} converted_particles.star",
+        f"python3 src/main.py {tablefile} {vllfile} {tomogramfile} particles.star",
         pty=True,
     )
 
