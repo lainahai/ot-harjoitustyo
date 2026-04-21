@@ -29,19 +29,21 @@ Kun käyttöliittymässä on valittu käsiteltävät tiedostot tai ne on annettu
 
 ```mermaid
 sequenceDiagram
-
-sequenceDiagram
     participant UI
     participant ParticleService
     participant FileRepository
     participant LogService
     UI -->>+ParticleService: convert_dynamo_star(tbl, vll, tomo, of)
+    ParticleService-->>ParticleService: _read_dynamo_particles(tbl, vll)
     ParticleService-->>+FileRepository: read_dynamotable(tbl)
     FileRepository-->>-ParticleService: particles_df
     ParticleService-->>+FileRepository: read_vll(vll)
     FileRepository-->>-ParticleService: vll_contents
+    ParticleService-->>ParticleService: _filter_unaveraged_particles(particles_dynamo_df)
     ParticleService -->>+FileRepository: read_starfile(tomo)
     FileRepository -->>-ParticleService: tomograms_star_df
+    ParticleService-->>ParticleService: _convert_eulers_dynamo_relion(eulers_dynamo_df)
+    ParticleService-->>ParticleService: _convert_coordinates_dynamo_relion(coordinates_dynamo_df)
     ParticleService -->>FileRepository: write_starfile(converted_particles_dict)
     ParticleService -->>LogService: log(f"Wrote {of}", ui_only=True)
       
