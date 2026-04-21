@@ -15,4 +15,5 @@
 | 12.4.2026 |  2     | Uusia kysymyksiä, binning mukaan laskentaan |
 | 14.4.2026 |  7     | Komentoriville tulostus esim. putkitusta varten. Luokkajako uusiksi, muutama uusi testi, uudet invoke-taskit, dokumentaatio |
 | 20.4.2026 |  7     | Textual-käyttöliittymä aloitettu. Tiedostojen valinta, tallennettavan tiedoston nimeäminen ja konversio mahdollista tehdä käyttöliittymästä  |
-|           | __41__ |              |
+| 21.4.2026 |  5     | Tulostuksen hallinta siirretty LogServiceen. Konversion voi tulostaa käyttöliittymään. Testit ja dokumentaatio päivitetty.  |
+|           | __46__ |              |
