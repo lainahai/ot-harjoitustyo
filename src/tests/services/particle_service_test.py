@@ -1,5 +1,6 @@
 import unittest
 from io import StringIO
+from pathlib import Path
 
 import pandas as pd
 
@@ -18,10 +19,11 @@ class MockLogService:
 
 
 class MockRepository(FileRepository):
-    def __init__(self):
+    def __init__(self, log_service):
         self.write_star_called = False
         self.write_star_filename = None
         self.converted_dict = None
+        super().__init__(log_service)
 
     def read_dynamotable(self, filename):
         f = StringIO(
@@ -72,9 +74,10 @@ class MockRepository(FileRepository):
 
 class TestParticleService(unittest.TestCase):
     def setUp(self):
-        self.repository = MockRepository()
         self.log_service = MockLogService()
+        self.repository = MockRepository(self.log_service)
         self.particle_service = ParticleService(self.log_service, self.repository)
+        self.root_dir = Path(__file__).parents[3]
 
     def test_find_tomo_names_finds_correct_names_from_vll_string(self):
         test_string = "/mnt/data/project/Tomograms/job006/tomograms/rec_Position_10_2.mrc\n/mnt/data/project/Tomograms/job006/tomograms/rec_Position_10_3.mrc"
@@ -118,9 +121,9 @@ class TestParticleService(unittest.TestCase):
         pd.testing.assert_frame_equal(converted_df, correct_df, check_dtype=False)
 
     def test_convert_outputs_to_log_if_output_file_is_not_given(self):
-        tablefile = "../../test_data/test_table.tbl"
-        vllfile = "../../test_data/test_vll.vll"
-        tomogramfile = "../../test_data/test_tomograms.star"
+        tablefile = Path(self.root_dir, "test_data/test_table.tbl")
+        vllfile = Path(self.root_dir, "test_data/test_vll.vll")
+        tomogramfile = Path(self.root_dir, "test_data/test_tomograms.star")
 
         self.particle_service.convert_dynamo_star(tablefile, vllfile, tomogramfile)
 
@@ -129,10 +132,10 @@ class TestParticleService(unittest.TestCase):
         self.assertFalse(self.repository.write_star_called)
 
     def test_convert_writes_file_when_output_file_is_given(self):
-        tablefile = "../../test_data/test_table.tbl"
-        vllfile = "../../test_data/test_vll.vll"
-        tomogramfile = "../../test_data/test_tomograms.star"
-        outputfile = "test_output.star"
+        tablefile = Path(self.root_dir, "test_data/test_table.tbl")
+        vllfile = Path(self.root_dir, "test_data/test_vll.vll")
+        tomogramfile = Path(self.root_dir, "test_data/test_tomograms.star")
+        outputfile = Path(self.root_dir, "test_data/test_output.star")
 
         self.particle_service.convert_dynamo_star(
             tablefile, vllfile, tomogramfile, outputfile
@@ -141,3 +144,19 @@ class TestParticleService(unittest.TestCase):
         self.assertTrue(self.log_service.logged_strings[0] == f"Wrote {outputfile}")
         self.assertTrue(self.log_service.logged_srings_ui_only[0])
         self.assertTrue(self.repository.write_star_called)
+
+    def test_convert_aborts_if_input_filename_is_not_valid(self):
+        tablefile = 123
+        vllfile = None
+        tomogramfile = Path(self.root_dir, "test_data")
+        outputfile = Path(self.root_dir, "test_data/test_output.star")
+
+        self.particle_service.convert_dynamo_star(
+            tablefile, vllfile, tomogramfile, outputfile
+        )
+
+        self.assertTrue(len(self.log_service.logged_strings) == 1)
+        self.assertTrue("Invalid file path 123" in self.log_service.logged_strings[0])
+        self.assertTrue("Invalid file path None" in self.log_service.logged_strings[0])
+        self.assertTrue("is a directory" in self.log_service.logged_strings[0])
+        self.assertFalse(self.repository.write_star_called)

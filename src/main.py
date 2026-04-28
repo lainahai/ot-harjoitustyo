@@ -1,5 +1,6 @@
 import argparse
 
+from repositories.file_repository import FileRepository
 from services.log_service import LogService
 from services.particle_service import ParticleService
 from ui.converter_app import ConverterApp
@@ -7,7 +8,8 @@ from ui.converter_app import ConverterApp
 
 def main(args):
     log_service = LogService()
-    pservice = ParticleService(log_service)
+    repository = FileRepository(log_service)
+    pservice = ParticleService(log_service, repository)
 
     table_file_name = args.tablefile
     vll_file_name = args.vllfile

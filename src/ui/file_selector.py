@@ -7,8 +7,22 @@ from textual.widgets import DirectoryTree, Static
 
 
 class FileSelector(VerticalScroll):
+    """File selection component for the UI.
+
+    Composed of a label to tell which file is selected and
+    a directory tree component filtered by a string.
+    """
+
     class FilteredDirectoryTree(DirectoryTree):
+        """DirectoryTree component with filter."""
+
         def __init__(self, path, filter_string):
+            """Constructor for the component.
+
+            args:
+                path: string ot PathLike to the directory tree root.
+                filter_string: string to filter files by name.
+            """
             self.filter_string = filter_string
             super().__init__(path)
 
@@ -20,16 +34,17 @@ class FileSelector(VerticalScroll):
             ]
 
     def __init__(self, title, filter_string, id=None):
+        """Constructor for the class.
+
+        args:
+            title: String to show as the header for the component.
+            filter_string: string to filter files by name.
+        """
         self.title = title
         self.filter_string = filter_string
-        self.selected_file_path = None
         super().__init__(id=id, can_focus=False)
 
     def compose(self) -> ComposeResult:
+        """Compose the UI elements for this widget."""
         yield Static(self.title, classes="header")
-        # yield Static("", id="selected")
         yield self.FilteredDirectoryTree("./", self.filter_string)
-
-    def on_directory_tree_file_selected(self, message: DirectoryTree.FileSelected):
-        self.selected_file_path = message.path
-        # self.query_one("#selected").update(f"Selected: {str(self.selected_file_path)}")

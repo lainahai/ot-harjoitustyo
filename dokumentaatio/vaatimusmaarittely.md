@@ -33,7 +33,7 @@ Dynamossa sijainnit on ilmoitettu pikseleinä, Relionissa ångströmeinä. Myös
 * [x] Käyttäjä voi tulostaa konversion käyttöliittymän näkymään tiedostoon tallentamisen sijaan
 * [ ] Käyttäjä voi valita haluaako muuntaa vain keskiarvoistettujen partikkelien tiedot, vai kaikki partikkelit 
 * [x] Ilmoitus onnistuneesta konversiosta käyttöliittymässä - tehty
-* [ ] Virheilmoitukset näkyviin käyttöliittymään
+* [x] Virheilmoitukset näkyviin käyttöliittymään - tehty
 
 ## Laajennusmahdollisuuksia
 * Luettavien tiedostojen validointi, esim:

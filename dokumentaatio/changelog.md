@@ -23,3 +23,11 @@
 - Jos käyttäjä antaa kaikki tiedostot parametreina, käyttöliittymä ei käynnisty
 - Siirretty tulostusten ohjaus LogServiceen
 - Konversion tuloksen voi tulostaa käyttöliittymään
+
+## Viikko 6
+
+- Virhetilanteiden käsittelyä parannettu
+  - Ohjelma ei kaadu jos tiedostoa ei ole olemassa  tai sitä ei voi lukea.
+  - Ohjelma ei kaadu jos sille antaa kuvatiedoston.
+- Virhetilanteessa käyttäjälle tulostuu siisti virheilmoitus.
+- Testattu ettei ohjelma kaadu jos tiedostopolku on virheellinen.
