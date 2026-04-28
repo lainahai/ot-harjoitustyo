@@ -7,6 +7,7 @@ Sovellus muuntaa Dynamon käyttämän partikkelien metadatan Relionin vaatimaan 
 - [Changelog](dokumentaatio/changelog.md)
 - [Työaikakirjanpito](dokumentaatio/tuntikirjanpito.md)
 - [Arkkitehtuuri](dokumentaatio/arkkitehtuuri.md)
+- [Käyttöohje](dokumentaatio/kayttoohje.md)
 
 ## Release
 
@@ -28,7 +29,7 @@ Sovellus muuntaa Dynamon käyttämän partikkelien metadatan Relionin vaatimaan 
 Ohjelman suoritus
 
 - ```poetry run invoke start``` käynnistää ohjelman käyttöliittymän. 
-    - HUOM: invoken avulla suoritettaessa näppäimistökomennot eivät jostain syystä toimi. Käytä siis hiirtä.
+    - HUOM: invoken avulla suoritettaessa enter-näppäin ei jostain syystä toimi. Käytä siis hiirtä.
 - ```poetry run invoke print-starfile``` tulostaa konversion ilman käyttöliittymää 
 - ```poetry run invoke write-starfile``` tallentaa konversion ```particles.star``` -tiedostoon
 
