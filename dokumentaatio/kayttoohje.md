@@ -12,10 +12,9 @@ Käynnistä ohjelma käyttöliittymässä suorittamalla
 
 ```poetry run invoke start```
 
-Jos haluat tehdä konversion ilman käyttöliittymää, anna Dynamo-taulukon sisältäm tiedosto, vll-tiedosto ja tomogrammien metadatatiedosto parametreina.
-Jos haluat tallentaa tiedot suoraan tiedostoon, anna myös tallennettavan tiedoston nimi. Muutoin tiedot tulostetaan terminaaliin.
+Jos haluat kokeilla tehdä konversion testidatasta (kansiossa `test_data`) ilman käyttöliittymää, aja komento
 
-```poetry run invoke table_file vll_file tomo_file [output_file]```
+```poetry run invoke print_starfile```
 
 ## Käyttöliittymä
 
