@@ -31,3 +31,7 @@
   - Ohjelma ei kaadu jos sille antaa kuvatiedoston.
 - Virhetilanteessa käyttäjälle tulostuu siisti virheilmoitus.
 - Testattu ettei ohjelma kaadu jos tiedostopolku on virheellinen.
+
+## Viikko 7
+
+- Virhetilanteiden käsittelyä laajennettu lisää

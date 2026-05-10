@@ -18,4 +18,5 @@
 | 21.4.2026 |  5     | Tulostuksen hallinta siirretty LogServiceen. Konversion voi tulostaa käyttöliittymään. Testit ja dokumentaatio päivitetty.  |
 | 27.4.2026 |  4     | Virhetilanteiden käsittelyä lisätty. Docstringit lisätty FileRepositoryyn ja ParticleServiceen.  |
 | 28.4.2026 |  6     | Laatuvirheiden korjausta ja refaktorointia. Dokumentaatio: käyttöohjeet, arkkitehtuuri ja docstring    |
-|           | __56__ |              |
+| 10.5.2026 |  7     | Loppupalautuksen dokumentaatio, virhetilanteiden käsittelyä.    |
+|           | __63__ |              |
