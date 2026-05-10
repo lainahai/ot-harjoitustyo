@@ -6,9 +6,9 @@ Ystäväni tutkii proteiineja kryoelektronimikroskopialla. Analyysissä tarvitaa
 
 Sovellusta käytetään metadatan muuntamiseen kahden tomografia-analyysiohjelmiston, [Dynamon](https://www.dynamo-em.org) ja [Relionin](https://relion.readthedocs.io), välillä. Tavoitteena on vähintään saada Dynamossa valittujen partikkelien tiedot muunnettua muotoon, jossa ne voidaan viedä Relioniin jatkoanalyysiä varten. 
 
-Dynamo tallentaa tiedot suoraan matlab-matriiseina, Relion käyttää star-tiedostoja. Lisäksi tarvitaan vll-tiedosto, jossa on absoluuttiset polut analysoitavaan tomogrammidataan. Tämä luodaan aluksi käsin, mutta ehkä jatkossa myös suoraan osana konversiota.
+Dynamo tallentaa tiedot suoraan matlab-matriiseina, Relion käyttää star-tiedostoja. Lisäksi tarvitaan vll-tiedosto, jossa on absoluuttiset polut analysoitavaan tomogrammidataan.
 
-Dynamossa sijainnit on ilmoitettu pikseleinä, Relionissa ångströmeinä. Myös partikkeleiden asennon ilmoittamiseen käytettävät euler-kulmat on määritelty ohjelmissa eri tavoin. Konversio ei siis onnistu vain muuttamalla tietojen tallennustapaa, vaan arvot täytyy myös muuntaa esitystapojen välillä oikein.
+Dynamossa sijainnit on ilmoitettu pikseleinä [binnatuissa](https://en.wikipedia.org/wiki/Pixel_binning) tomogrammeissa, Relionissa puolestaan pikseleissä binnaamattomissa tomogrammeissa. Myös partikkeleiden asennon ilmoittamiseen käytettävät euler-kulmat on määritelty ohjelmissa eri tavoin. Konversio ei siis onnistu vain muuttamalla tietojen tallennustapaa, vaan arvot täytyy myös muuntaa esitystapojen välillä oikein.
 
 ## Alustava toiminnallisuus
 
@@ -26,14 +26,13 @@ Dynamossa sijainnit on ilmoitettu pikseleinä, Relionissa ångströmeinä. Myös
 * [x] Käyttäjä voi luoda dynamon taulukosta star-tiedoston, joka sisältää  - tehty
     * koordinaatit
     * euler-kulmat
-    * tomogrammin tunnistetiedot
+    * tomogrammin tunnisteen
     * jännitteen
 * [x] Tiedostoon tallentamisen sijaan star-tiedoston sisältö voidaan tulostaa esimerkiksi putkittamista varten  - tehty
     * Vain kun ohjelma suoritetaan ilman käyttöliittymää
-* [x] Käyttäjä voi tulostaa konversion käyttöliittymän näkymään tiedostoon tallentamisen sijaan
-* [ ] Käyttäjä voi valita haluaako muuntaa vain keskiarvoistettujen partikkelien tiedot, vai kaikki partikkelit 
+* [x] Käyttäjä voi tulostaa konversion käyttöliittymän näkymään tiedostoon tallentamisen sijaan - tehty
 * [x] Ilmoitus onnistuneesta konversiosta käyttöliittymässä - tehty
-* [x] Virheilmoitukset näkyviin käyttöliittymään - tehty
+* [x] Virhetilanteissa käyttäjälle näytetään ymmärrettävä virheilmoitus - tehty
 
 ## Laajennusmahdollisuuksia
 * Luettavien tiedostojen validointi, esim:
@@ -43,6 +42,5 @@ Dynamossa sijainnit on ilmoitettu pikseleinä, Relionissa ångströmeinä. Myös
     * Koordinaatit ovat tomogrammien sisällä
     * Euler-kulmat ovat järkevissä rajoissa
 * VLL-tiedoston luonti
-  * Käyttäjä voisi valita projektikansiosta analysoitavaksi otettavat tomogrammit
-  * Tämän voi ehkä luoda suoraan tomogrammien star-tiedoston pohjalta
-* Konversio myös toiseen suuntaan, Relionista Dynamoon
+    * Käyttäjä voisi valita projektikansiosta analysoitavaksi otettavat tomogrammit
+    * Tämän voi ehkä luoda suoraan tomogrammien star-tiedoston pohjalta

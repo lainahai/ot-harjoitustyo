@@ -4,7 +4,7 @@ class LogService:
 
     def log(self, log_str, ui_only=False):
         if self.ui:
-            self.ui.show_log(log_str)
+            self.ui.show_log(str(log_str))
         elif not ui_only:
             try:
                 print(log_str)

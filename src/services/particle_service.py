@@ -41,67 +41,85 @@ class ParticleService:
                 Optional. Path to the output file. String or PathLike object.
                 If omitted, starfile-formatted data is redirected to the LogService object.
         """
+        try:
+            if self._validate_input_paths(
+                dynamo_table_filename, tomograms_star_filename, vll_filename
+            ):
+                return
 
-        if self._validate_input_paths(
-            dynamo_table_filename, tomograms_star_filename, vll_filename
-        ):
-            return
+            particles_dynamo_df = self._read_dynamo_particles(
+                dynamo_table_filename, vll_filename
+            )
 
-        particles_dynamo_df = self._read_dynamo_particles(
-            dynamo_table_filename, vll_filename
-        )
+            tomograms_star_dict = self._repository.read_starfile(
+                tomograms_star_filename
+            )
 
-        tomograms_star_dict = self._repository.read_starfile(tomograms_star_filename)
+            if particles_dynamo_df is None or "global" not in tomograms_star_dict:
+                return
+            tomograms_star_df = tomograms_star_dict["global"]
 
-        if particles_dynamo_df is None or "global" not in tomograms_star_dict:
-            return
-        tomograms_star_df = tomograms_star_dict["global"]
+            particles_dynamo_df = self._filter_unaveraged_particles(particles_dynamo_df)
 
-        particles_dynamo_df = self._filter_unaveraged_particles(particles_dynamo_df)
+            if not self._check_no_missing_tomogram_data(
+                particles_dynamo_df["tomo name"], tomograms_star_df["rlnTomoName"]
+            ):
+                return
 
-        eulers_dynamo_df = particles_dynamo_df[["tdrot", "tilt", "narot"]]
-        eulers_relion_df = self._convert_eulers_dynamo_relion(eulers_dynamo_df)
+            particles_dynamo_df = particles_dynamo_df.merge(
+                tomograms_star_df[["rlnTomoName", "rlnTomoTomogramBinning"]],
+                left_on="tomo name",
+                right_on="rlnTomoName",
+            )
 
-        particles_dynamo_df = particles_dynamo_df.merge(
-            tomograms_star_df[["rlnTomoName", "rlnTomoTomogramBinning"]],
-            left_on="tomo name",
-            right_on="rlnTomoName",
-        )
+            eulers_dynamo_df = particles_dynamo_df[["tdrot", "tilt", "narot"]]
+            eulers_relion_df = self._convert_eulers_dynamo_relion(eulers_dynamo_df)
 
-        coordinates_dynamo_df = particles_dynamo_df[
-            ["x", "dx", "y", "dy", "z", "dz", "rlnTomoTomogramBinning"]
-        ]
-        coordinates_relion_df = self._convert_coordinates_dynamo_relion(
-            coordinates_dynamo_df
-        )
+            coordinates_dynamo_df = particles_dynamo_df[
+                ["x", "dx", "y", "dy", "z", "dz", "rlnTomoTomogramBinning"]
+            ]
+            coordinates_relion_df = self._convert_coordinates_dynamo_relion(
+                coordinates_dynamo_df
+            )
 
-        particles_relion_df = self._compile_particle_data_for_relion(
-            particles_dynamo_df,
-            coordinates_relion_df,
-            eulers_relion_df,
-            tomograms_star_df,
-        )
+            particles_relion_df = self._compile_particle_data_for_relion(
+                particles_dynamo_df,
+                coordinates_relion_df,
+                eulers_relion_df,
+                tomograms_star_df,
+            )
 
-        converted_particles_dict = {"particles": particles_relion_df}
+            converted_particles_dict = {"particles": particles_relion_df}
 
-        if output_filename:
-            self._repository.write_starfile(converted_particles_dict, output_filename)
-            self._log_service.log(f"Wrote {output_filename}", ui_only=True)
-            return
-        self._log_service.log(starfile.to_string(converted_particles_dict))
+            if output_filename:
+                self._repository.write_starfile(
+                    converted_particles_dict, output_filename
+                )
+                self._log_service.log(f"Wrote {output_filename}", ui_only=True)
+                return
+            self._log_service.log(starfile.to_string(converted_particles_dict))
+        except KeyError as err:
+            self._log_service.log(f"Missing required field: {str(err)}")
+        except Exception as err:
+            self._log_service.log(f"An unexpected error occurred: {str(err)}")
 
     def _read_dynamo_particles(self, table_filename, vll_filename):
-        particles_df = self._repository.read_dynamotable(table_filename)
+        dynamo_particles_df = self._repository.read_dynamotable(table_filename)
         vll_contents = self._repository.read_vll(vll_filename)
 
-        if particles_df is None or vll_contents is None:
+        if dynamo_particles_df is None or vll_contents is None:
+            return None
+        tomogram_names = self._find_tomo_names(vll_contents)
+
+        if not self._validate_dynamo_table_and_vll_tomograms(
+            dynamo_particles_df, tomogram_names
+        ):
             return None
 
-        tomogram_names = self._find_tomo_names(vll_contents)
-        tomo_name_column = [tomogram_names[i - 1] for i in particles_df["tomo"]]
-        particles_df["tomo name"] = tomo_name_column
+        tomo_name_column = [tomogram_names[i - 1] for i in dynamo_particles_df["tomo"]]
+        dynamo_particles_df["tomo name"] = tomo_name_column
 
-        return particles_df
+        return dynamo_particles_df
 
     def _find_tomo_names(self, vll_contents):
         tomo_name_pattern = re.compile(r"rec_(\w+).mrc$", re.MULTILINE)
@@ -171,3 +189,33 @@ class ParticleService:
             self._log_service.log("\n".join(errors))
             return errors
         return None
+
+    def _validate_dynamo_table_and_vll_tomograms(self, dynamo_particles_df, tomo_names):
+        min_tomo_index = min(dynamo_particles_df["tomo"])
+        max_tomo_index = max(dynamo_particles_df["tomo"])
+        if len(tomo_names) == 0:
+            self._log_service.log("No tomograms found in VLL file.")
+            return False
+        if len(tomo_names) < max_tomo_index:
+            self._log_service.log(
+                f"Dynamo table tomogram index out of bounds: found index {max_tomo_index}, "
+                + f"but VLL file only contains {len(tomo_names)} tomograms."
+            )
+            return False
+        if min_tomo_index < 1:
+            self._log_service.log(
+                f"Dynamo table tomogram index out of bounds: {min_tomo_index}"
+            )
+            return False
+        return True
+
+    def _check_no_missing_tomogram_data(self, dynamo_tomo_series, star_tomo_series):
+        missing_tomos = [
+            tomo for tomo in dynamo_tomo_series if tomo not in star_tomo_series.values
+        ]
+        if len(missing_tomos) > 0:
+            self._log_service.log("Tomograms missing from tomogram data:")
+            for tomo in missing_tomos:
+                self._log_service.log(tomo)
+            return False
+        return True

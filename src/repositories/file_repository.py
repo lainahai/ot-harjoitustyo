@@ -69,7 +69,7 @@ class FileRepository:
 
         Returns:
             Starfile contents in a dictionary with table names as keys and DataFrames as values.
-            None if the file couldn't be read.
+            Empty dictionary if there were errors.
         """
         try:
             star_dictionary = starfile.read(filename, always_dict=True)
@@ -78,12 +78,12 @@ class FileRepository:
             return star_dictionary
         except ValueError as err:
             self._log_service.log(f"Error parsing file {filename}: {str(err)}")
-            return None
+            return {}
         except PermissionError:
             self._log_service.log(
                 f"Couldn't read file {str(filename)}: Permission denied."
             )
-            return None
+            return {}
 
     def write_starfile(self, data_dict, filename):
         """Write a starfile.

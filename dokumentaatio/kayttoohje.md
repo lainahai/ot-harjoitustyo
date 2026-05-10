@@ -14,7 +14,9 @@ Käynnistä ohjelma käyttöliittymässä suorittamalla
 
 Jos haluat kokeilla tehdä konversion testidatasta (kansiossa `test_data`) ilman käyttöliittymää, aja komento
 
-```poetry run invoke print_starfile```
+```poetry run invoke print-starfile```
+
+```poetry run invoke write-starfile``` tallentaa konversion ```particles.star``` -tiedostoon
 
 ## Käyttöliittymä
 
@@ -26,7 +28,7 @@ Tärkeimmät näppäinkomennot:
 
  - ```tab``` siirtyy elementtien välillä
  - Liiku tiedostojen valinnassa nuolinäppäimillä
- - ```enter``` hyväksyy 
+ - ```enter``` hyväksyy (Invoken avulla suoritettaessa enter-näppäin ei toimi, käytä hiirtä)
 
  Valittujen tiedostojen polut näkyvät näppäimien yläpuolella.
 

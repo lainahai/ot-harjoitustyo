@@ -6,6 +6,7 @@ import pandas as pd
 
 from repositories.file_repository import FileRepository
 from services.particle_service import ParticleService
+from src.services.log_service import LogService
 
 
 class MockLogService:
@@ -125,7 +126,7 @@ class TestParticleService(unittest.TestCase):
         vllfile = Path(self.root_dir, "test_data/test_vll.vll")
         tomogramfile = Path(self.root_dir, "test_data/test_tomograms.star")
 
-        self.particle_service.convert_dynamo_star(tablefile, vllfile, tomogramfile)
+        self.particle_service.convert_dynamo_star(tablefile, tomogramfile, vllfile)
 
         self.assertTrue(len(self.log_service.logged_strings) > 0)
         self.assertFalse(self.log_service.logged_srings_ui_only[0])
@@ -138,7 +139,7 @@ class TestParticleService(unittest.TestCase):
         outputfile = Path(self.root_dir, "test_data/test_output.star")
 
         self.particle_service.convert_dynamo_star(
-            tablefile, vllfile, tomogramfile, outputfile
+            tablefile, tomogramfile, vllfile, outputfile
         )
 
         self.assertTrue(self.log_service.logged_strings[0] == f"Wrote {outputfile}")
@@ -152,7 +153,7 @@ class TestParticleService(unittest.TestCase):
         outputfile = Path(self.root_dir, "test_data/test_output.star")
 
         self.particle_service.convert_dynamo_star(
-            tablefile, vllfile, tomogramfile, outputfile
+            tablefile, tomogramfile, vllfile, outputfile
         )
 
         self.assertTrue(len(self.log_service.logged_strings) == 1)
@@ -160,3 +161,138 @@ class TestParticleService(unittest.TestCase):
         self.assertTrue("Invalid file path None" in self.log_service.logged_strings[0])
         self.assertTrue("is a directory" in self.log_service.logged_strings[0])
         self.assertFalse(self.repository.write_star_called)
+
+    def test_convert_aborts_if_input_file_does_not_exist(self):
+        tablefile = Path(self.root_dir, "test_data/test_table.tbl")
+        vllfile = Path(
+            self.root_dir, "test_data/867tgbo687tgbo6877t86b68o7b68tbgto8bv86t6rv.vll"
+        )
+        tomogramfile = Path(self.root_dir, "test_data")
+        outputfile = Path(self.root_dir, "test_data/test_output.star")
+
+        self.particle_service.convert_dynamo_star(
+            tablefile, tomogramfile, vllfile, outputfile
+        )
+
+        self.assertTrue(len(self.log_service.logged_strings) == 1)
+        self.assertTrue("does not exist" in self.log_service.logged_strings[0])
+        self.assertFalse(self.repository.write_star_called)
+
+    def test_convert_aborts_if_coordinate_field_missing_from_dynamo_data(self):
+        class MissingCoordinateFieldMockRepository(MockRepository):
+            def read_dynamotable(self, filename):
+                table = super().read_dynamotable(filename)
+                return table.drop("x", axis=1)
+
+        self.particle_service._repository = MissingCoordinateFieldMockRepository(
+            self.log_service
+        )
+
+        tablefile = Path(self.root_dir, "test_data/test_table.tbl")
+        vllfile = Path(self.root_dir, "test_data/test_vll.vll")
+        tomogramfile = Path(self.root_dir, "test_data/test_tomograms.star")
+        outputfile = Path(self.root_dir, "test_data/test_output.star")
+
+        self.particle_service.convert_dynamo_star(
+            tablefile, tomogramfile, vllfile, outputfile
+        )
+
+        self.assertTrue(len(self.log_service.logged_strings) > 0)
+        self.assertTrue("Missing required field" in self.log_service.logged_strings[0])
+        self.assertFalse(self.repository.write_star_called)
+
+    def test_convert_aborts_if_required_field_missing_from_tomogram_data(self):
+        class MissingTomogramFieldMockRepository(MockRepository):
+            def read_starfile(self, filename):
+                star_dict = super().read_starfile(filename)
+                missing_tomo_name_df = star_dict["global"].drop("rlnTomoName", axis=1)
+                return {"global": missing_tomo_name_df}
+
+        self.particle_service._repository = MissingTomogramFieldMockRepository(
+            self.log_service
+        )
+
+        tablefile = Path(self.root_dir, "test_data/test_table.tbl")
+        vllfile = Path(self.root_dir, "test_data/test_vll.vll")
+        tomogramfile = Path(self.root_dir, "test_data/test_tomograms.star")
+        outputfile = Path(self.root_dir, "test_data/test_output.star")
+
+        self.particle_service.convert_dynamo_star(
+            tablefile, tomogramfile, vllfile, outputfile
+        )
+
+        self.assertTrue(len(self.log_service.logged_strings) > 0)
+        self.assertTrue("Missing required field" in self.log_service.logged_strings[0])
+        self.assertFalse(self.repository.write_star_called)
+
+    def test_convert_aborts_if_tomogram_data_is_missing(self):
+        class MissingTomogramDataMockRepository(MockRepository):
+            def read_vll(self, filename):
+                return "/mnt/data/project/Tomograms/job006/tomograms/rec_not_found_in_tomograms_star.mrc"
+
+        self.particle_service._repository = MissingTomogramDataMockRepository(
+            self.log_service
+        )
+
+        tablefile = Path(self.root_dir, "test_data/test_table.tbl")
+        vllfile = Path(self.root_dir, "test_data/test_vll.vll")
+        tomogramfile = Path(self.root_dir, "test_data/test_tomograms.star")
+        outputfile = Path(self.root_dir, "test_data/test_output.star")
+
+        self.particle_service.convert_dynamo_star(
+            tablefile, tomogramfile, vllfile, outputfile
+        )
+
+        self.assertTrue(len(self.log_service.logged_strings) > 0)
+        self.assertTrue("Tomograms missing" in self.log_service.logged_strings[0])
+        self.assertEqual(
+            "not_found_in_tomograms_star", self.log_service.logged_strings[1]
+        )
+        self.assertFalse(self.repository.write_star_called)
+
+    def test_convert_aborts_if_dynamo_tomogram_index_is_out_of_bounds(self):
+        class OutOfBoundsMockRepository(MockRepository):
+            def read_dynamotable(self, filename):
+                table = super().read_dynamotable(filename)
+                table["tomo"] = [1, 2]
+                return table
+
+        self.particle_service._repository = OutOfBoundsMockRepository(self.log_service)
+
+        tablefile = Path(self.root_dir, "test_data/test_table.tbl")
+        vllfile = Path(self.root_dir, "test_data/test_vll.vll")
+        tomogramfile = Path(self.root_dir, "test_data/test_tomograms.star")
+        outputfile = Path(self.root_dir, "test_data/test_output.star")
+
+        self.particle_service.convert_dynamo_star(
+            tablefile, tomogramfile, vllfile, outputfile
+        )
+
+        self.assertTrue(len(self.log_service.logged_strings) > 0)
+        self.assertTrue(
+            "Dynamo table tomogram index out of bounds: found index 2"
+            in self.log_service.logged_strings[0]
+        )
+        self.assertFalse(self.repository.write_star_called)
+
+    def test_conversion_works_correctly_using_test_data_files(self):
+        class MockUi:
+            def __init__(self):
+                self.logged_strings = []
+
+            def show_log(self, log_str):
+                self.logged_strings.append(log_str)
+
+        mock_ui = MockUi()
+        log_service_with_mock_ui = LogService(mock_ui)
+        repository = FileRepository(log_service_with_mock_ui)
+        particle_service = ParticleService(log_service_with_mock_ui, repository)
+
+        tablefile = Path(self.root_dir, "test_data/test_table.tbl")
+        vllfile = Path(self.root_dir, "test_data/test_vll.vll")
+        tomogramfile = Path(self.root_dir, "test_data/test_tomograms.star")
+
+        particle_service.convert_dynamo_star(tablefile, tomogramfile, vllfile)
+
+        self.assertEqual(len(mock_ui.logged_strings), 1)
+        self.assertTrue("data_particles" in mock_ui.logged_strings[0])
